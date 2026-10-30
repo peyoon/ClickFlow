@@ -1,0 +1,111 @@
+<UserControl x:Class="ClickFlow.App.Views.RecorderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ClickFlow.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:RecorderViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,16">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <CheckBox Content="마우스 이동 기록" IsChecked="{Binding RecordMouseMoves}" Margin="0,0,16,0" IsEnabled="{Binding IsRecording, Converter={StaticResource InverseBool}}" />
+                <Button Content="● 녹화 시작" Style="{StaticResource Button.Primary}" Command="{Binding StartCommand}" MinWidth="110"
+                        Visibility="{Binding IsRecording, Converter={StaticResource InverseBoolToVisibility}}" />
+                <Button Content="■ 중지" Style="{StaticResource Button.Danger}" Command="{Binding StopCommand}" MinWidth="110"
+                        Visibility="{Binding IsRecording, Converter={StaticResource BoolToVisibility}}" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="레코더" Style="{StaticResource Text.PageTitle}" />
+                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource Text.Muted}" Margin="0,4,0,0" TextWrapping="Wrap" />
+            </StackPanel>
+        </DockPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Panel.Surface}" Margin="0,0,0,16">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Right" Text="{Binding Elapsed, Converter={StaticResource Countdown}}" Style="{StaticResource Text.Stat}" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="10" Height="10" VerticalAlignment="Center">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="{StaticResource Brush.TextMuted}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsRecording}" Value="True">
+                                        <Setter Property="Fill" Value="{StaticResource Brush.Recording}" />
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.25" Duration="0:0:0.7" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.1" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                    <TextBlock Margin="10,0,0,0" FontSize="15" FontWeight="Medium">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="Text" Value="대기 중" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsRecording}" Value="True">
+                                        <Setter Property="Text" Value="Recording…" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Text.Muted}" Margin="12,0,0,0" VerticalAlignment="Center">
+                        <Run Text="{Binding Events.Count, Mode=OneWay}" /><Run Text="개 동작" />
+                    </TextBlock>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource Panel.Well}" Padding="0">
+            <ListBox ItemsSource="{Binding Events}" FontFamily="{StaticResource Font.Mono}" Padding="6">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="110" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Offset, StringFormat='{}{0:mm\\:ss\\.fff}'}" Foreground="{StaticResource Brush.TextMuted}" FontFamily="{StaticResource Font.Mono}" />
+                            <TextBlock Grid.Column="1" Text="{Binding Action.DisplayName}" FontFamily="{StaticResource Font.UI}" />
+                            <TextBlock Grid.Column="2" Text="{Binding Action.DisplayValue}" Foreground="{StaticResource Brush.TextSecondary}" FontFamily="{StaticResource Font.Mono}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+
+        <DockPanel Grid.Row="3" Margin="0,12,0,0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="지우기" Style="{StaticResource Button.Ghost}" Command="{Binding ClearCommand}" IsEnabled="{Binding CanUse}" />
+                <Button Content="편집 중인 매크로에 추가" Command="{Binding AppendToEditorCommand}" IsEnabled="{Binding CanUse}" Margin="4,0,0,0" />
+                <Button Content="새 매크로로 저장" Command="{Binding SaveAsNewCommand}" IsEnabled="{Binding CanUse}" Margin="4,0,0,0" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="매크로 이름" Style="{StaticResource Text.Muted}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                <TextBox Text="{Binding NewMacroName, UpdateSourceTrigger=PropertyChanged}" Width="240" IsEnabled="{Binding CanUse}" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>

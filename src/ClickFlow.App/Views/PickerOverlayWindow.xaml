@@ -1,0 +1,29 @@
+<Window x:Class="ClickFlow.App.Views.PickerOverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="좌표 지정"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="#01000000"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Cursor="Cross"
+        WindowStartupLocation="Manual">
+    <Canvas x:Name="Root">
+        <Rectangle x:Name="Dim" Fill="#30000000" IsHitTestVisible="False" />
+
+        <Line x:Name="CrossH" Stroke="#CC5B9CF5" StrokeThickness="1" IsHitTestVisible="False" />
+        <Line x:Name="CrossV" Stroke="#CC5B9CF5" StrokeThickness="1" IsHitTestVisible="False" />
+
+        <Rectangle x:Name="Selection" Stroke="#FF5B9CF5" StrokeThickness="1.5" Fill="#205B9CF5" Visibility="Collapsed" IsHitTestVisible="False" />
+
+        <Border x:Name="Hud" Background="#F0121214" BorderBrush="#26FFFFFF" BorderThickness="1" CornerRadius="6" Padding="12,8" IsHitTestVisible="False">
+            <StackPanel>
+                <TextBlock x:Name="HudTitle" Foreground="#FFA1A1AA" FontSize="12" Margin="0,0,0,2" />
+                <TextBlock x:Name="HudValue" Foreground="#FFF4F4F5" FontFamily="Cascadia Mono, Consolas" FontSize="15" />
+                <TextBlock x:Name="HudHint" Foreground="#FF71717A" FontSize="11" Margin="0,4,0,0" />
+            </StackPanel>
+        </Border>
+    </Canvas>
+</Window>

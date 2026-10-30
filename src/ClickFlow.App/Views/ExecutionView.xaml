@@ -1,0 +1,126 @@
+<UserControl x:Class="ClickFlow.App.Views.ExecutionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ClickFlow.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:ExecutionViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,16">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <ComboBox ItemsSource="{Binding Macros}" SelectedItem="{Binding SelectedMacro}" DisplayMemberPath="Name" Width="220" IsEnabled="{Binding IsIdle}" Margin="0,0,12,0" />
+                <Button Content="▶ START" Style="{StaticResource Button.Primary}" Command="{Binding StartCommand}" MinWidth="100" IsEnabled="{Binding IsIdle}" />
+                <Button Content="Ⅱ PAUSE" Command="{Binding PauseCommand}" MinWidth="100" Margin="6,0,0,0" IsEnabled="{Binding Execution.IsBusy}" />
+                <Button Content="■ STOP" Style="{StaticResource Button.Danger}" Command="{Binding StopCommand}" MinWidth="100" Margin="6,0,0,0" IsEnabled="{Binding Execution.IsBusy}" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="실행" Style="{StaticResource Text.PageTitle}" />
+                <TextBlock Text="핫키: F8 시작 · F9 일시정지/재개 · F10 중지 · F12 비상 정지 (설정에서 변경)" Style="{StaticResource Text.Muted}" Margin="0,4,0,0" />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- status strip -->
+        <Border Grid.Row="1" Style="{StaticResource Panel.Surface}" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="10" Height="10" Fill="{Binding Execution.State, Converter={StaticResource StateToBrush}}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Execution.State, Converter={StaticResource StateToText}}" FontSize="16" FontWeight="Medium" Margin="10,0,0,0" />
+                        <TextBlock Text="{Binding Execution.CurrentMacro.Name}" FontSize="16" Foreground="{StaticResource Brush.TextSecondary}" Margin="10,0,0,0"
+                                   Visibility="{Binding Execution.CurrentMacro, Converter={StaticResource NullToCollapsed}}" />
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource Text.Muted}" Margin="20,4,0,0" Visibility="{Binding ScheduledTime, Converter={StaticResource NullToCollapsed}}">
+                        <Run Text="예약 시각 " /><Run Text="{Binding ScheduledTime, Mode=OneWay, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss.fff}'}" FontFamily="{StaticResource Font.Mono}" Foreground="{StaticResource Brush.Accent}" />
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Text.Muted}" Margin="20,4,0,0" Visibility="{Binding Execution.LastResult, Converter={StaticResource NullToCollapsed}}">
+                        <Run Text="최근 결과: " /><Run Text="{Binding Execution.LastResult.ExecutedActionCount, Mode=OneWay}" /><Run Text="개 동작 · " /><Run Text="{Binding Execution.LastResult.Duration.TotalMilliseconds, Mode=OneWay, StringFormat='{}{0:F0} ms'}" /><Run Text=" · " /><Run Text="{Binding Execution.LastResult.ErrorMessage, Mode=OneWay}" Foreground="{StaticResource Brush.Danger}" />
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Visibility="{Binding Execution.Remaining, Converter={StaticResource NullToCollapsed}}">
+                    <TextBlock Text="실행까지" Style="{StaticResource Text.Label}" HorizontalAlignment="Right" />
+                    <TextBlock Text="{Binding Execution.Remaining, Converter={StaticResource Countdown}}" Style="{StaticResource Text.Stat}" FontSize="34" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MinWidth="260" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0">
+                <TextBlock DockPanel.Dock="Top" Text="동작" Style="{StaticResource Text.SectionTitle}" Margin="0,0,0,8" />
+                <ListBox ItemsSource="{Binding Actions}" IsHitTestVisible="False">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="28" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Ellipse Width="7" Height="7" Fill="{StaticResource Brush.Success}" VerticalAlignment="Center" HorizontalAlignment="Left" Visibility="{Binding IsCurrent, Converter={StaticResource BoolToVisibility}}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Index, Converter={StaticResource IndexPlusOne}}" Style="{StaticResource Text.Mono}" Foreground="{StaticResource Brush.TextMuted}" />
+                                <TextBlock Grid.Column="2" Text="{Binding DisplayName}" />
+                                <TextBlock Grid.Column="3" Text="{Binding DisplayValue}" Style="{StaticResource Text.Mono}" Foreground="{StaticResource Brush.TextSecondary}" TextTrimming="CharacterEllipsis" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="Padding" Value="6,6" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource Brush.AccentSoft}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </DockPanel>
+
+            <DockPanel Grid.Column="2">
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                        <CheckBox Content="자동 스크롤" IsChecked="{Binding AutoScroll}" VerticalAlignment="Center" Margin="0,0,12,0" />
+                        <Button Content="복사" Style="{StaticResource Button.Ghost}" Command="{Binding CopyLogCommand}" />
+                        <Button Content="저장" Style="{StaticResource Button.Ghost}" Command="{Binding SaveLogCommand}" />
+                        <Button Content="지우기" Style="{StaticResource Button.Ghost}" Command="{Binding ClearLogCommand}" />
+                    </StackPanel>
+                    <TextBlock Text="실행 로그" Style="{StaticResource Text.SectionTitle}" VerticalAlignment="Center" />
+                </DockPanel>
+                <Border Style="{StaticResource Panel.Well}" Padding="0">
+                    <ListBox x:Name="LogList" ItemsSource="{Binding Execution.Log}" Padding="6" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Pixel">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="Padding" Value="6,2" />
+                                <Setter Property="Margin" Value="0" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock FontFamily="{StaticResource Font.Mono}" FontSize="12" Foreground="{Binding Level, Converter={StaticResource LogLevelToBrush}}" TextWrapping="Wrap">
+                                    <Run Text="{Binding Timestamp, Mode=OneWay, StringFormat='[{0:HH:mm:ss.fff}]'}" Foreground="{StaticResource Brush.TextMuted}" /><Run Text=" " /><Run Text="{Binding Message, Mode=OneWay}" />
+                                </TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</UserControl>
