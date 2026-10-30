@@ -1,0 +1,40 @@
+{
+  "name": "수강신청 테스트",
+  "description": "스펙 1장의 예시 시나리오. 좌표는 본인 화면에 맞게 [좌표 지정]으로 다시 잡으세요.",
+  "profile": "Study",
+  "schedule": {
+    "type": "Once",
+    "startTime": "2026-11-02T09:00:00.000",
+    "intervalMs": 60000,
+    "repeatCount": 1
+  },
+  "targetWindow": {
+    "bringToFront": true
+  },
+  "settings": {
+    "maxRetries": 3,
+    "retryIntervalMs": 500,
+    "stopOnError": true,
+    "restoreCursorAfterRun": false,
+    "defaultDelayBetweenActionsMs": 0
+  },
+  "actions": [
+    { "type": "Click", "x": 1240, "y": 730, "button": "Left", "clickCount": 1, "moveBeforeClick": true, "coordinateMode": "Screen", "comment": "동작 1 - 신청 버튼" },
+    { "type": "Wait", "milliseconds": 300 },
+    { "type": "Click", "x": 1100, "y": 680, "button": "Left", "clickCount": 1, "moveBeforeClick": true, "coordinateMode": "Screen", "comment": "동작 3 - 확인 버튼" },
+    { "type": "Wait", "milliseconds": 100 },
+    { "type": "Key", "key": "ENTER" },
+    {
+      "type": "Condition",
+      "comment": "동작 6 - 결과 확인: 완료 메시지 영역의 픽셀 색상",
+      "condition": { "type": "PixelColor", "x": 960, "y": 540, "color": { "r": 255, "g": 255, "b": 255 }, "tolerance": 10 },
+      "retryCount": 5,
+      "retryIntervalMs": 200,
+      "onFailure": "Abort",
+      "thenActions": [
+        { "type": "Stop", "success": true }
+      ],
+      "elseActions": []
+    }
+  ]
+}
