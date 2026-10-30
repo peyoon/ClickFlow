@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5C794467-5B62-487F-841F-092C1BD375F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickFlow.Core", "src\ClickFlow.Core\ClickFlow.Core.csproj", "{FE2A003F-214D-4DC2-93B7-E01826F190DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickFlow.Engine", "src\ClickFlow.Engine\ClickFlow.Engine.csproj", "{AF979F45-C766-4251-A542-78AEEA1E8339}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickFlow.Input", "src\ClickFlow.Input\ClickFlow.Input.csproj", "{E8BF4C67-D501-4CFC-B4E0-00A61A13417E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickFlow.Storage", "src\ClickFlow.Storage\ClickFlow.Storage.csproj", "{F76D7385-304E-4A21-94E1-8FD120C8714B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickFlow.App", "src\ClickFlow.App\ClickFlow.App.csproj", "{61B6A35B-9FF6-4332-AAEA-DD99FF215385}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8B6E798C-C79A-4692-9209-84FA7C7F4F96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickFlow.Tests", "tests\ClickFlow.Tests\ClickFlow.Tests.csproj", "{B5A79A7B-CBEE-497D-9139-5237D644C11B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE2A003F-214D-4DC2-93B7-E01826F190DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE2A003F-214D-4DC2-93B7-E01826F190DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE2A003F-214D-4DC2-93B7-E01826F190DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE2A003F-214D-4DC2-93B7-E01826F190DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF979F45-C766-4251-A542-78AEEA1E8339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF979F45-C766-4251-A542-78AEEA1E8339}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF979F45-C766-4251-A542-78AEEA1E8339}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF979F45-C766-4251-A542-78AEEA1E8339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8BF4C67-D501-4CFC-B4E0-00A61A13417E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8BF4C67-D501-4CFC-B4E0-00A61A13417E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8BF4C67-D501-4CFC-B4E0-00A61A13417E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8BF4C67-D501-4CFC-B4E0-00A61A13417E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F76D7385-304E-4A21-94E1-8FD120C8714B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F76D7385-304E-4A21-94E1-8FD120C8714B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F76D7385-304E-4A21-94E1-8FD120C8714B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F76D7385-304E-4A21-94E1-8FD120C8714B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B6A35B-9FF6-4332-AAEA-DD99FF215385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B6A35B-9FF6-4332-AAEA-DD99FF215385}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B6A35B-9FF6-4332-AAEA-DD99FF215385}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B6A35B-9FF6-4332-AAEA-DD99FF215385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5A79A7B-CBEE-497D-9139-5237D644C11B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5A79A7B-CBEE-497D-9139-5237D644C11B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5A79A7B-CBEE-497D-9139-5237D644C11B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5A79A7B-CBEE-497D-9139-5237D644C11B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FE2A003F-214D-4DC2-93B7-E01826F190DA} = {5C794467-5B62-487F-841F-092C1BD375F6}
+		{AF979F45-C766-4251-A542-78AEEA1E8339} = {5C794467-5B62-487F-841F-092C1BD375F6}
+		{E8BF4C67-D501-4CFC-B4E0-00A61A13417E} = {5C794467-5B62-487F-841F-092C1BD375F6}
+		{F76D7385-304E-4A21-94E1-8FD120C8714B} = {5C794467-5B62-487F-841F-092C1BD375F6}
+		{61B6A35B-9FF6-4332-AAEA-DD99FF215385} = {5C794467-5B62-487F-841F-092C1BD375F6}
+		{B5A79A7B-CBEE-497D-9139-5237D644C11B} = {8B6E798C-C79A-4692-9209-84FA7C7F4F96}
+	EndGlobalSection
+EndGlobal
