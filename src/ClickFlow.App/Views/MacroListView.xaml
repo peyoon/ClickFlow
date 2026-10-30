@@ -1,0 +1,89 @@
+<UserControl x:Class="ClickFlow.App.Views.MacroListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ClickFlow.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:MacroListViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,16">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="가져오기" Style="{StaticResource Button.Ghost}" Command="{Binding ImportCommand}" />
+                <Button Content="폴더 열기" Style="{StaticResource Button.Ghost}" Command="{Binding OpenFolderCommand}" Margin="4,0,0,0" />
+                <Button Content="새로고침" Style="{StaticResource Button.Ghost}" Command="{Binding ReloadCommand}" Margin="4,0,12,0" />
+                <Button Content="새 매크로" Style="{StaticResource Button.Primary}" Command="{Binding NewCommand}" />
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="내 매크로" Style="{StaticResource Text.PageTitle}" />
+                <TextBlock Text="{Binding MacroDirectory}" Style="{StaticResource Text.Muted}" FontSize="12" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+        </DockPanel>
+
+        <StackPanel Grid.Row="1" Margin="0,0,0,12">
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" MaxWidth="360" HorizontalAlignment="Left" Width="360" ToolTip="이름, 프로필, 설명으로 검색" />
+            <Border Style="{StaticResource Panel.Well}" Margin="0,10,0,0" BorderBrush="{StaticResource Brush.DangerSoft}"
+                    Visibility="{Binding LoadError, Converter={StaticResource NullToCollapsed}}">
+                <StackPanel>
+                    <TextBlock Text="읽지 못한 매크로 파일" Foreground="{StaticResource Brush.Danger}" FontWeight="Medium" Margin="0,0,0,4" />
+                    <TextBlock Text="{Binding LoadError}" Style="{StaticResource Text.Mono}" FontSize="12" TextWrapping="Wrap" Foreground="{StaticResource Brush.TextSecondary}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <TextBlock Text="아직 매크로가 없습니다. [새 매크로]를 누르거나 레코더로 녹화를 시작하세요." Style="{StaticResource Text.Muted}"
+                       Visibility="{Binding Macros.Count, Converter={StaticResource ZeroToVisible}}" Margin="0,8" />
+
+            <ListBox ItemsSource="{Binding View}" SelectedItem="{Binding Selected}" Visibility="{Binding Macros.Count, Converter={StaticResource ZeroToCollapsed}}">
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource Text.SectionTitle}" Margin="4,14,0,6">
+                                    <Run Text="{Binding Name, Mode=OneWay}" /><Run Text="  " /><Run Text="{Binding ItemCount, Mode=OneWay}" Foreground="{StaticResource Brush.TextMuted}" />
+                                </TextBlock>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Style="{StaticResource Button.Icon}" Content="&#xE70F;" ToolTip="편집"
+                                        Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" />
+                                <Button Style="{StaticResource Button.Icon}" Content="&#xE8C8;" ToolTip="복제"
+                                        Command="{Binding DataContext.DuplicateCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" />
+                                <Button Style="{StaticResource Button.Icon}" Content="&#xEDE1;" ToolTip="내보내기"
+                                        Command="{Binding DataContext.ExportCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" />
+                                <Button Style="{StaticResource Button.Icon}" Content="&#xE74D;" ToolTip="삭제" Foreground="{StaticResource Brush.Danger}"
+                                        Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" />
+                                <Button Content="▶ 실행" Margin="8,0,0,0"
+                                        Command="{Binding DataContext.RunCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" />
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="14" />
+                                <TextBlock Style="{StaticResource Text.Muted}" FontSize="12" Margin="0,3,0,0">
+                                    <Run Text="{Binding Actions.Count, Mode=OneWay}" /><Run Text="개 동작 · " /><Run Text="{Binding Schedule.Summary, Mode=OneWay}" /><Run Text=" · 수정 " /><Run Text="{Binding UpdatedAt, Mode=OneWay, StringFormat='{}{0:MM-dd HH:mm}'}" />
+                                </TextBlock>
+                                <TextBlock Text="{Binding Description}" Style="{StaticResource Text.Muted}" FontSize="12" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"
+                                           Visibility="{Binding Description, Converter={StaticResource NullToCollapsed}}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding OpenCommand}" CommandParameter="{Binding Selected}" />
+                    <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" CommandParameter="{Binding Selected}" />
+                </ListBox.InputBindings>
+            </ListBox>
+        </Grid>
+    </Grid>
+</UserControl>

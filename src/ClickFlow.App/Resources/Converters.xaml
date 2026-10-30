@@ -1,0 +1,21 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:ClickFlow.App.Converters">
+
+    <c:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+    <c:BoolToVisibilityConverter x:Key="InverseBoolToVisibility" Invert="True" />
+    <c:InverseBoolConverter x:Key="InverseBool" />
+    <c:NullToVisibilityConverter x:Key="NullToCollapsed" />
+    <c:NullToVisibilityConverter x:Key="NullToVisible" Invert="True" />
+    <c:ZeroToVisibilityConverter x:Key="ZeroToVisible" />
+    <c:ZeroToVisibilityConverter x:Key="ZeroToCollapsed" Invert="True" />
+    <c:EnumEqualsConverter x:Key="EnumEquals" />
+    <c:EnumEqualsToVisibilityConverter x:Key="EnumToVisibility" />
+    <c:ExecutionStateToBrushConverter x:Key="StateToBrush" />
+    <c:ExecutionStateToTextConverter x:Key="StateToText" />
+    <c:LogLevelToBrushConverter x:Key="LogLevelToBrush" />
+    <c:TimeSpanToCountdownConverter x:Key="Countdown" />
+    <c:IndexPlusOneConverter x:Key="IndexPlusOne" />
+    <c:DelayTextConverter x:Key="DelayText" />
+
+</ResourceDictionary>
